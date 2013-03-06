@@ -15,7 +15,5 @@
 
 void ConfigureOscillator(void)
 {
-    RP0 = 1;            // Cambiamos de banco al banco 1
     OSCCAL = 0x80;      // Establecemos la frecuencia a la frec central.
-    RP0 = 0;            // Volvemos al banco 0
 }

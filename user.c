@@ -23,7 +23,6 @@ void InitApp(void)
     CMCON = 7;      // Apgamos comparadores
     ADCON0 = 0;     // ADC apagado
     T1CON = 0;      // Apgamos el timer 1
-    RP0 = 1;        // Cambiamos de banco al banco 1
     ANSEL = 0;      // AD Apagado
     TRISIO = 0x1F;  // Configuramos GP5 como salida y el resto como entrada
     WPU = 0;        // Deshabilitamos las resistencias pull-up
@@ -38,6 +37,5 @@ void InitApp(void)
         OPTION_REG = 0xC0;  // Configuramos el timer para funcionar con flanco ascendente
         INTCON = 0x90;      // Habilitamos interrupciones global e interrupcion extrena por el pin GP2
     }
-    RP0 = 0;        // Cambiamos de banco al banco 0
 }
 
