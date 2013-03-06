@@ -1,6 +1,3 @@
-/******************************************************************************/
-/* Files to Include                                                           */
-/******************************************************************************/
 
 #if defined(__XC)
     #include <xc.h>         /* XC8 General Include File */
@@ -15,46 +12,40 @@
 #include "user.h"          /* User funct/params, such as InitApp */
 
 /******************************************************************************/
-/* User Global Variable Declaration                                           */
+/* Declaracion de variables globales de usuario                               */
 /******************************************************************************/
 
-/* i.e. uint8_t <variable_name>; */
-
 /******************************************************************************/
-/* Main Program                                                               */
+/* Programa principal                                                         */
 /******************************************************************************/
 
 void main(void)
 {
     bool luz=false;
     long retardo,retardo_max=2000; // Retardo maximo 6000 x 10 ms = 60 segundos
-    // Configuramos el oscilador del micro
-    ConfigureOscillator();
-
-    /* Initialize I/O and Peripherals for application */
-    InitApp();
-    
-    // Bucle infinito
+    ConfigureOscillator();  // Configuramos el oscilador del micro
+    InitApp();              // Inicializa puertos de I/O y perifericos
+    // Comienza bucle infinito
     while(1){
-        SLEEP();
+        if(!luz)
+            SLEEP(); // Entra en modo bajo consumo hasta que ocurra una interrupcion solamente cuando esta apagada la luz
         if(ADRESL == 1){
             // Preguntamos si hay un uno en la pata GPIO4 que corresponden a las barreras infrarrojas
             if(GP4){
                 // Si hay un uno, preguntamos si estaba encendida la luz
                 if(luz){
                     // Si estaba encendida, esperamos 3 seg, la apagamos y cambiamos la bandera
-                    for(retardo=300;retardo>0;retardo--){
+                    for(retardo=300;retardo>0;retardo--)
                         __delay_ms(10);
-                    }
                     Apaga_Luz();
                     luz=false;
-                }
+                } // Cierra if(luz)
                 else{
                     // Si no estaba encendida, la encendemos y cambiamso la bandera
                     Enciende_Luz();
                     luz=true;
-                }
-            }
+                }   // Cierra else
+            } // Cierra if(GP4)
             retardo=100;        // Cargamos este registro con 100 (equivale a 1s)
             while(GP4){
                 retardo--;      // Decrementamos el registro
@@ -65,30 +56,24 @@ void main(void)
             // Solamente ingresa aca si esta prendida la luz
             if(luz){
                 // Preguntamos si retardo max (60 segundos) es mayor que cero.
-                if(retardo_max > 0)
-                // Si es mayor decrementamos. Siempre deberia pasar por aca.
+                if(retardo_max > 0) // Si es mayor decrementamos. Siempre deberia pasar por aca.
                     retardo_max--;
-                else{
-                    // Si pasaron 60 segundos apagamos la luz.
+                else{ // Sino, pasaron 60 segundos, apagamos la luz.
                     retardo_max=2000; // Retardo maximo 6000 x 10 ms = 60 segundos
                     Apaga_Luz();
                     luz=false;
                 } // Cierra else
-            } // Cierra if luz
-        } // Cierra 
+            } // Cierra if(luz)
+        } // Cierra if(ADRESL == 1)
         else{
             if(luz){
                 // Si estaba encendida, esperamos 3 seg, la apagamos y cambiamos la bandera
-                for(retardo=300;retardo>0;retardo--){
+                for(retardo=300;retardo>0;retardo--)
                     __delay_ms(10);
-                }
                 Apaga_Luz();
                 luz=false;
-            }
-        }
-        // Delay de 10 ms
-        __delay_ms(10);
+            } // Cierra if(luz)
+        } // Cierra else
+        __delay_ms(10); // Delay de 10 ms
     } // Cierra el while
-
 } // Cierra el main
-

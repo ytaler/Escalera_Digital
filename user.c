@@ -14,35 +14,30 @@
 #include "user.h"
 
 /******************************************************************************/
-/* User Functions                                                             */
+/* Funciones de usuario                                                       */
 /******************************************************************************/
-
-/* <Initialize variables in user.h and insert code for user algorithms.> */
 
 void InitApp(void)
 {
-    INTCON = 0;     // Deshabilitamos interrupciones
     GPIO = 0;       // Inicializamos puertos
-    CMCON = 0x07;   // Apgamos comparadores
+    CMCON = 7;      // Apgamos comparadores
     ADCON0 = 0;     // ADC apagado
+    T1CON = 0;      // Apgamos el timer 1
     RP0 = 1;        // Cambiamos de banco al banco 1
-    GIE = 1;        // Habilita interrupciones
-    INTE = 1;       // Habilita interrupcion extrena por el pin GPIO2
     ANSEL = 0;      // AD Apagado
     TRISIO = 0x1F;  // Configuramos GP5 como salida y el resto como entrada
     WPU = 0;        // Deshabilitamos las resistencias pull-up
     IOC = 0x14;     // Habilitamos interrupciones por cambio de GP4
-    RP0 = 0;        // Cambiamos de banco al banco 1
-    T1CON = 0;      // Apgamos el timer 1
-    if(GP2){     // Verificamos si es la condicion inicial
-        ADRESL = 1;      // Habilitamos el funcionamiento del circuito
-        RP0 = 1;        // Cambiamos de banco al banco 1
+    if(GP2){        // Verificamos si esta habilitado cuando prendemos el micro
+        ADRESL = 1;         // Circuito encendido
         OPTION_REG = 0x80;  // Configuramos el timer con flanco descendente
-        INTE = 0;       // Deshabilita interrupcion por GP2
-        GPIE = 1;       // Habilita interrupcion por cambio de estados en los puertos
-        RP0 = 0;        // Volvemos al banco 0
+        INTCON = 0x88;      // Habilitamos interrupciones global e interrupcion por cambio de estado en GP2 y GP4
     }
-    else    ADRESL = 0;
-
+    else{
+        ADRESL = 0;         // Circuito apagado
+        OPTION_REG = 0xC0;  // Configuramos el timer para funcionar con flanco ascendente
+        INTCON = 0x90;      // Habilitamos interrupciones global e interrupcion extrena por el pin GP2
+    }
+    RP0 = 0;        // Cambiamos de banco al banco 0
 }
 
