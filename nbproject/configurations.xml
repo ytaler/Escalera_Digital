@@ -43,8 +43,8 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>PICkit3PlatformTool</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>1.12</languageToolchainVersion>
-        <platform>3</platform>
+        <languageToolchainVersion>1.21</languageToolchainVersion>
+        <platform>2</platform>
       </toolsSet>
       <compileType>
         <linkerTool>
@@ -66,6 +66,7 @@
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
       <HI-TECH-COMP>
+        <property key="asmlist" value="true"/>
         <property key="define-macros" value=""/>
         <property key="extra-include-directories" value=""/>
         <property key="identifier-length" value="255"/>
@@ -81,6 +82,7 @@
         <property key="preprocess-assembler" value="true"/>
         <property key="undefine-macros" value=""/>
         <property key="use-cci" value="false"/>
+        <property key="use-iar" value="false"/>
         <property key="verbose" value="false"/>
         <property key="warning-level" value="0"/>
         <property key="what-to-do" value="ignore"/>
@@ -88,9 +90,11 @@
       <HI-TECH-LINK>
         <property key="additional-options-checksum" value=""/>
         <property key="additional-options-code-offset" value=""/>
+        <property key="additional-options-command-line" value=""/>
         <property key="additional-options-errata" value=""/>
         <property key="additional-options-extend-address" value="false"/>
         <property key="additional-options-trace-type" value=""/>
+        <property key="additional-options-use-response-files" value="false"/>
         <property key="backup-reset-condition-flags" value="false"/>
         <property key="calibrate-oscillator" value="true"/>
         <property key="calibrate-oscillator-value" value=""/>
@@ -132,11 +136,11 @@
         <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
-        <property key="memories.bootflash" value="false"/>
-        <property key="memories.configurationmemory" value="false"/>
-        <property key="memories.eeprom" value="false"/>
+        <property key="memories.bootflash" value="true"/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.eeprom" value="true"/>
         <property key="memories.flashdata" value="true"/>
-        <property key="memories.id" value="false"/>
+        <property key="memories.id" value="true"/>
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.end" value="0x3ff"/>
         <property key="memories.programmemory.start" value="0x0"/>
@@ -149,11 +153,18 @@
         <property key="programoptions.preserveprogramrange.end" value="0x3ff"/>
         <property key="programoptions.preserveprogramrange.start" value="0x0"/>
         <property key="programoptions.preserveuserid" value="false"/>
+        <property key="programoptions.testmodeentrymethod" value="VPPFirst"/>
         <property key="programoptions.usehighvoltageonmclr" value="false"/>
         <property key="programoptions.uselvpprogramming" value="false"/>
         <property key="voltagevalue" value="5.0"/>
       </PICkit3PlatformTool>
       <XC8-config-global>
+        <property key="advanced-elf" value="true"/>
+        <property key="output-file-format" value="-mcof,+elf"/>
+        <property key="stack-size-high" value="auto"/>
+        <property key="stack-size-low" value="auto"/>
+        <property key="stack-size-main" value="auto"/>
+        <property key="stack-type" value="compiled"/>
       </XC8-config-global>
     </conf>
   </confs>
