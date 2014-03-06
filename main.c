@@ -42,11 +42,11 @@ void main(void)
         if(ADRESL == 1){ // Si es igual a uno esta encendido el circuito. Habilitado desde las interrupciones.
             // Solamente ingresa aca si esta prendida la luz
             if(luz){
-                // Preguntamos si retardo max (20 segundos) es mayor que cero.
+                // Preguntamos si retardo max (25 segundos) es mayor que cero.
                 if(retardo_max > 0) // Si es mayor decrementamos. Siempre deberia pasar por aca.
                     retardo_max--;
                 else{ // Sino, pasaron 20 segundos, apagamos la luz.
-                    retardo_max=2500; // Retardo maximo 3000 x 10 ms = 30 segundos
+                    retardo_max=2500; // Retardo maximo 2500 x 10 ms = 25 segundos
                     Apaga_Luz();
                     luz=false;
                 } // Cierra else
@@ -64,7 +64,7 @@ void main(void)
                     __delay_ms(10);
                 Apaga_Luz();
                 luz=false;
-                retardo_max=2500; // Retardo maximo 3000 x 10 ms = 30 segundos
+                retardo_max=2500; // Retardo maximo 2500 x 10 ms = 25 segundos
             } // Cierra if(luz)
         } // Cierra else
         __delay_ms(10); // Delay de 10 ms
