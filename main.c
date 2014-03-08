@@ -11,30 +11,22 @@
 #include "system.h"        /* System funct/params, like osc/peripheral config */
 #include "user.h"          /* User funct/params, such as InitApp */
 
-/******************************************************************************/
-/* Declaracion de variables globales de usuario                               */
-/******************************************************************************/
+/******************************************************************************
+* Declaracion de variables globales de usuario                               *
+******************************************************************************/
 
-/******************************************************************************/
-/* Programa principal                                                         */
-/******************************************************************************/
+/******************************************************************************
+ * Programa principal
+ * Se usa el registro ADRESL para pasar parametros entre funciones ya que no se
+ * usa el AD
+******************************************************************************/
 
 void main(void)
 {
     bool luz=false;
-    long retardo,retardo_max=2500; // Retardo maximo 3000 x 10 ms = 30 segundos
+    long retardo,retardo_max=2500; // Retardo maximo 2500 x 10 ms = 25 segundos
     ConfigureOscillator();  // Configuramos el oscilador del micro
     InitApp();              // Inicializa puertos de I/O y perifericos
-    // Delay por secuencia inicializacion sensor PIR
-    __delay_ms(27000);
-    Enciende_Luz();
-    __delay_ms(1000);
-    Apaga_Luz();
-    __delay_ms(1000);
-    Enciende_Luz();
-    __delay_ms(1000);
-    Apaga_Luz();
-    // Fin inicializacion
     // Comienza bucle infinito
     while(1){
         if(!luz)
@@ -45,7 +37,7 @@ void main(void)
                 // Preguntamos si retardo max (25 segundos) es mayor que cero.
                 if(retardo_max > 0) // Si es mayor decrementamos. Siempre deberia pasar por aca.
                     retardo_max--;
-                else{ // Sino, pasaron 20 segundos, apagamos la luz.
+                else{ // Sino, pasaron 25 segundos, apagamos la luz.
                     retardo_max=2500; // Retardo maximo 2500 x 10 ms = 25 segundos
                     Apaga_Luz();
                     luz=false;
