@@ -31,7 +31,7 @@ void main(void)
     while(1){
         if(!luz)
             SLEEP(); // Entra en modo bajo consumo hasta que ocurra una interrupcion solamente cuando esta apagada la luz
-        if(ADRESL == 1){ // Si es igual a uno esta encendido el circuito. Habilitado desde las interrupciones.
+        if(ADRESL > 1){ // Si es igual a uno esta encendido el circuito. Habilitado desde las interrupciones.
             // Solamente ingresa aca si esta prendida la luz
             if(luz){
                 // Preguntamos si retardo max (25 segundos) es mayor que cero.
@@ -41,13 +41,14 @@ void main(void)
                     retardo_max=2500; // Retardo maximo 2500 x 10 ms = 25 segundos
                     Apaga_Luz();
                     luz=false;
+                    ADRESL = 0x01; // Circuito encendido, valor inicial
                 } // Cierra else
             } // Cierra if(luz)
             else{
                 luz=true;
                 Enciende_Luz();
             }
-        } // Cierra if(ADRESL == 1)
+        } // Cierra if(ADRESL > 1)
         else{ // Sino significa que se debe deshabilitar porque el sensor ldr informa que hay luz solar
             // ADRESL = 0 --> manejado desde las interrupciones
             if(luz){
