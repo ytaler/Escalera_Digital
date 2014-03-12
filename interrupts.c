@@ -14,8 +14,8 @@
 #define FCY             SYS_FREQ/4
 #define _XTAL_FREQ      4000000
 
-#define Enciende_Fuente() GP1 = 0x01;
-#define Apaga_Fuente() GP1 = 0x00;
+#define Enciende_Fuente() GP1 = 0;
+#define Apaga_Fuente() GP1 = 1;
 
 /******************************************************************************/
 /* Interrupt Routines                                                         */
@@ -35,13 +35,21 @@ void interrupt isr(void){
          * desactivar el circuito mediante la señal en GP2 (cero)
          */
         GPIF=0; // Borramos la bandera
+        // Ahora verificamos de donde viene la interrupcion
         if(!GP2){
-                    Apaga_Fuente()      // Dehabilitamos el transistor que comanda la fuente secundaria
-                    ADRESL = 0;         // Deshabilitamos el funcionamiento del circuito
-                    OPTION_REG = 0xC0;  // Configuramos el timer con flanco ascendente
-                    INTE = 1;           // Habilita interrupcion por GP2
-                    GPIE = 0;           // Deshabilita interrupcion por cambio de estados en los puertos
+            Apaga_Fuente()      // Dehabilitamos el transistor que comanda la fuente secundaria
+            ADRESL = 0;         // Deshabilitamos el funcionamiento del circuito
+            OPTION_REG = 0xC0;  // Configuramos el timer con flanco ascendente
+            INTCON = 0x90;      // Habilitamos interrupciones global e interrupcion extrena por el pin GP2
+                                // GIE=1, INTE=1 - 1001-0000
         } // Cierra if(!GP2)
+        else{
+            if(GP3)
+                ADRESL = 3; // Si fue disparado por GP3, asignamos el valor 3
+            else
+                if(GP4)
+                    ADRESL = 4; // Sino, la unica opcion que queda es GP4, y el valor 4
+        }
     }
     else{
         if(INTF){
@@ -64,13 +72,13 @@ void interrupt isr(void){
                     Enciende_Fuente()   // Habilitamos el transistor que comanda la fuente secundaria
                     ADRESL = 1;         // Habilitamos el funcionamiento del circuito
                     OPTION_REG = 0x80;  // Configuramos el timer con flanco descendente
-                    INTE = 0;           // Deshabilita interrupcion por GP2
-                    GPIE = 1;           // Habilita interrupcion por cambio de estados en los puertos
+                    INTCON = 0x88;      // Habilitamos interrupciones global e interrupcion por cambio de estado en GP2 y GP4
+                                        // GIE=1, GPIE=1 - 1000-1000
                     // Delay por secuencia inicializacion sensor PIR y estabilizacion de la fuente = 1 minuto
-                    __delay_ms(15000);
-                    __delay_ms(15000);
-                    __delay_ms(15000);
-                    __delay_ms(15000);
+                    //__delay_ms(15000);
+                    //__delay_ms(15000);
+                    //__delay_ms(15000);
+                    //__delay_ms(15000);
                     // Fin inicializacion
                 } // Cierra if(ADRESL == 0)
             } // Cierta if(resultado >= 15)
@@ -79,8 +87,8 @@ void interrupt isr(void){
                     Apaga_Fuente()      // Dehabilitamos el transistor que comanda la fuente secundaria
                     ADRESL = 0;         // Deshabilitamos el funcionamiento del circuito
                     OPTION_REG = 0xC0;  // Configuramos el timer con flanco ascendente
-                    INTE = 1;           // Habilita interrupcion por GP2
-                    GPIE = 0;           // Deshabilita interrupcion por cambio de estados en los puertos
+                    INTCON = 0x90;      // Habilitamos interrupciones global e interrupcion extrena por el pin GP2
+                                        // GIE=1, INTE=1 - 1001-0000
                 } // Cierra if(ADRESL == 1)
             } // Cierra else if(resultado >= 15)
         } // Cierra if(INTF)
